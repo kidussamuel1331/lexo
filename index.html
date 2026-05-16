@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PK Website Store — Premium Website Templates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .dark body { background: #0a0a0a; color: #e5e5e5; }
+        .card-hover { transition: all 0.4s cubic-bezier(0.4,0,0.2,1); }
+        .card-hover:hover { transform: translateY(-8px); }
+        .card-hover:hover .card-img { transform: scale(1.05); }
+        .card-img { transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+        .slide-down { animation: slideDown 0.3s ease-out; }
+        @keyframes pulse-glow { 0%,100%{box-shadow:0 0 20px rgba(59,130,246,0.3)} 50%{box-shadow:0 0 40px rgba(59,130,246,0.6)} }
+        .pulse-glow { animation: pulse-glow 2s infinite; }
+        .modal-overlay { backdrop-filter: blur(8px); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
+        .toast { animation: toastIn 0.4s ease-out, toastOut 0.4s ease-in 3.6s forwards; }
+        @keyframes toastIn { from{opacity:0;transform:translateX(100%)} to{opacity:1;transform:translateX(0)} }
+        @keyframes toastOut { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(100%)} }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-6 right-6 z-[100] flex flex-col gap-3"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-md border-b border-gray-200 dark:border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2">
+                    <div class="w-9 h-9 bg-brand-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">PK</span>
+                    </div>
+                    <span class="font-bold text-lg dark:text-white">PK Store</span>
+                </a>
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#products" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Products</a>
+                    <a href="#contact" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Contact</a>
+                    <a href="#faq" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">FAQ</a>
+                </div>
+                <!-- Right Actions -->
+                <div class="flex items-center gap-3">
+                    <button id="darkToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors" aria-label="Toggle dark mode">
+                        <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                        <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    </button>
+                    <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200 dark:border-white/10 bg-white dark:bg-[#0a0a0a]">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#products" class="block text-sm font-medium py-2 text-gray-600 dark:text-gray-400 hover:text-brand-600">Products</a>
+                <a href="#contact" class="block text-sm font-medium py-2 text-gray-600 dark:text-gray-400 hover:text-brand-600">Contact</a>
+                <a href="#faq" class="block text-sm font-medium py-2 text-gray-600 dark:text-gray-400 hover:text-brand-600">FAQ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-[90vh] flex items-center relative overflow-hidden bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-100 dark:from-[#0a0a0a] dark:via-[#0a1428] dark:to-[#0a0a0a]">
+        <!-- Decorative Blobs -->
+        <div class="absolute top-20 left-10 w-72 h-72 bg-brand-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-brand-600/10 rounded-full blur-3xl"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 w-full">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 rounded-full text-sm font-medium">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        Premium Website Templates
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
+                        Launch Your
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-400"> Dream Site</span>
+                        <br>Today
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-lg leading-relaxed">
+                        20 professionally crafted website templates — fully responsive, modern design, ready to deploy. Just <strong class="text-gray-900 dark:text-white">9,000 ETB</strong> each.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#products" class="inline-flex items-center gap-2 px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all duration-150 shadow-lg shadow-brand-600/25 hover:shadow-brand-600/40">
+                            Browse Templates
+                            <i data-lucide="arrow-down" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#contact" class="inline-flex items-center gap-2 px-8 py-4 border-2 border-gray-300 dark:border-white/20 hover:border-brand-600 dark:hover:border-brand-500 text-gray-900 dark:text-white font-semibold rounded-xl transition-all duration-150">
+                            Contact Us
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-8 pt-4">
+                        <div>
+                            <div class="text-2xl font-bold">20+</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">Templates</div>
+                        </div>
+                        <div class="w-px h-10 bg-gray-300 dark:bg-white/10"></div>
+                        <div>
+                            <div class="text-2xl font-bold">100%</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">Responsive</div>
+                        </div>
+                        <div class="w-px h-10 bg-gray-300 dark:bg-white/10"></div>
+                        <div>
+                            <div class="text-2xl font-bold">24/7</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">Support</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden lg:block relative">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200 dark:border-white/10">
+                        <img src="https://picsum.photos/seed/pkhero/700/500.jpg" alt="Website Preview" class="w-full h-auto">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 right-6">
+                            <div class="bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-xl p-4 flex items-center justify-between">
+                                <div>
+                                    <div class="font-semibold text-sm dark:text-white">Modern Portfolio</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">Included in our collection</div>
+                                </div>
+                                <div class="text-brand-600 font-bold">9,000 ETB</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -top-4 -right-4 w-24 h-24 bg-brand-500/20 rounded-full blur-2xl"></div>
+                    <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-brand-600/20 rounded-full blur-2xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 sm:py-28 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Our Template Collection</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Choose from 20 premium, ready-to-use website templates. Each one is fully responsive and built with modern technology.</p>
+            </div>
+
+            <!-- Search & Filter Bar -->
+            <div class="flex flex-col sm:flex-row gap-4 mb-10 max-w-xl mx-auto">
+                <div class="relative flex-1">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                    <input id="searchInput" type="text" placeholder="Search templates..." class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all">
+                </div>
+                <select id="categoryFilter" class="px-4 py-3.5 rounded-xl border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
+                    <option value="all">All Categories</option>
+                    <option value="portfolio">Portfolio</option>
+                    <option value="business">Business</option>
+                    <option value="ecommerce">E-Commerce</option>
+                    <option value="blog">Blog</option>
+                    <option value="landing">Landing Page</option>
+                    <option value="agency">Agency</option>
+                </select>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="productsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Products will be injected by JS -->
+            </div>
+
+            <!-- No Results -->
+            <div id="noResults" class="hidden text-center py-16">
+                <i data-lucide="search-x" class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">No templates found</h3>
+                <p class="text-gray-500 dark:text-gray-400">Try a different search term or category.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-20 bg-white dark:bg-[#111111]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14">
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Why Choose PK Store?</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">We deliver quality templates that help you establish a professional online presence quickly.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="p-6 rounded-2xl border border-gray-200 dark:border-white/10 hover:border-brand-300 dark:hover:border-brand-800 transition-colors group">
+                    <div class="w-12 h-12 bg-brand-100 dark:bg-brand-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-600 transition-colors">
+                        <i data-lucide="zap" class="w-6 h-6 text-brand-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Fast Delivery</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Get your template delivered within 24 hours of purchase.</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-gray-200 dark:border-white/10 hover:border-brand-300 dark:hover:border-brand-800 transition-colors group">
+                    <div class="w-12 h-12 bg-brand-100 dark:bg-brand-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-600 transition-colors">
+                        <i data-lucide="smartphone" class="w-6 h-6 text-brand-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Fully Responsive</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Every template works perfectly on mobile, tablet, and desktop.</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-gray-200 dark:border-white/10 hover:border-brand-300 dark:hover:border-brand-800 transition-colors group">
+                    <div class="w-12 h-12 bg-brand-100 dark:bg-brand-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-600 transition-colors">
+                        <i data-lucide="palette" class="w-6 h-6 text-brand-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Modern Design</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Clean, trendy designs that impress your visitors instantly.</p>
+                </div>
+                <div class="p-6 rounded-2xl border border-gray-200 dark:border-white/10 hover:border-brand-300 dark:hover:border-brand-800 transition-colors group">
+                    <div class="w-12 h-12 bg-brand-100 dark:bg-brand-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-600 transition-colors">
+                        <i data-lucide="headphones" class="w-6 h-6 text-brand-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">24/7 Support</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">We're always here to help with setup and customization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-14">
+                <div>
+                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Get In Touch</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">Have questions about our templates? Need a custom design? We'd love to hear from you.</p>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-brand-100 dark:bg-brand-900/30 rounded-xl flex items-center justify-center shrink-0">
+                                <i data-lucide="mail" class="w-5 h-5 text-brand-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">Email</div>
+                                <div class="font-medium">pedu0817@gmail.com</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-brand-100 dark:bg-brand-900/30 rounded-xl flex items-center justify-center shrink-0">
+                                <i data-lucide="phone" class="w-5 h-5 text-brand-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">Phone</div>
+                                <div class="font-medium">+251 900667569</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-brand-100 dark:bg-brand-900/30 rounded-xl flex items-center justify-center shrink-0">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-brand-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">Location</div>
+                                <div class="font-medium">Addis Ababa, Ethiopia</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form id="contactForm" class="space-y-5 bg-white dark:bg-[#171717] p-8 rounded-2xl border border-gray-200 dark:border-white/10 shadow-lg">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Your Name</label>
+                        <input type="text" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-white/15 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all" placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Email Address</label>
+                        <input type="email" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-white/15 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all" placeholder="john@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Message</label>
+                        <textarea rows="4" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-white/15 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all resize-none" placeholder="How can we help you?"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all duration-150 shadow-lg shadow-brand-600/25 flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-white dark:bg-[#111111]">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-600 dark:text-gray-400">Everything you need to know about our templates.</p>
+            </div>
+            <div class="space-y-3" id="faqContainer">
+                <!-- FAQ items injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 dark:bg-black text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                <div class="sm:col-span-2 lg:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-9 h-9 bg-brand-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">PK</span>
+                        </div>
+                        <span class="font-bold text-lg">PK Store</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">Premium website templates at affordable prices. Based in Addis Ababa, serving clients worldwide.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider text-gray-300">Quick Links</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#products" class="hover:text-brand-400 transition-colors">Products</a></li>
+                        <li><a href="#contact" class="hover:text-brand-400 transition-colors">Contact</a></li>
+                        <li><a href="#faq" class="hover:text-brand-400 transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider text-gray-300">Categories</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li>Portfolio</li>
+                        <li>Business</li>
+                        <li>E-Commerce</li>
+                        <li>Blog</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider text-gray-300">Follow Us</h4>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors" aria-label="Facebook">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors" aria-label="Twitter">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors" aria-label="Instagram">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors" aria-label="LinkedIn">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://t.me/" class="w-10 h-10 bg-white/10 hover:bg-brand-600 rounded-lg flex items-center justify-center transition-colors" aria-label="Telegram">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 PK Website Store. All rights reserved.</p>
+                <p class="text-gray-500 text-sm">Made with <span class="text-red-400">❤</span> in Ethiopia</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Buy Now Modal -->
+    <div id="buyModal" class="fixed inset-0 z-[90] hidden">
+        <div class="modal-overlay absolute inset-0 bg-black/60" onclick="closeBuyModal()"></div>
+        <div class="relative z-10 flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-[#171717] rounded-2xl shadow-2xl w-full max-w-md slide-down border border-gray-200 dark:border-white/10">
+                <div class="p-6 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
+                    <h3 class="text-xl font-bold">Complete Your Purchase</h3>
+                    <button onclick="closeBuyModal()" class="p-2 hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <!-- Selected Product -->
+                    <div id="selectedProductInfo" class="flex items-center gap-4 p-4 bg-brand-50 dark:bg-brand-900/20 rounded-xl mb-6 border border-brand-200 dark:border-brand-800/30">
+                        <img id="modalImg" src="" alt="" class="w-16 h-12 object-cover rounded-lg">
+                        <div class="flex-1 min-w-0">
+                            <div id="modalName" class="font-semibold text-sm truncate"></div>
+                            <div class="text-brand-600 font-bold text-sm">9,000 ETB</div>
+                        </div>
+                    </div>
+                    <!-- Form -->
+                    <form id="buyForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1.5">Full Name *</label>
+                            <input type="text" id="buyName" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-white/15 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm" placeholder="Enter your full name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1.5">Email Address *</label>
+                            <input type="email" id="buyEmail" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-white/15 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm" placeholder="your@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1.5">Phone Number *</label>
+                            <input type="tel" id="buyPhone" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-white/15 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm" placeholder="+251 9XX XXX XXXX">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1.5">Selected Website</label>
+                            <input type="text" id="buyWebsite" readonly class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 text-sm cursor-not-allowed">
+                        </div>
+                        <button type="submit" id="buySubmitBtn" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all duration-150 shadow-lg shadow-brand-600/25 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                            <i data-lucide="credit-card" class="w-4 h-4"></i>
+                            Confirm Order — 9,000 ETB
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button id="backToTop" class="fixed bottom-6 right-6 z-50 w-12 h-12 bg-brand-600 hover:bg-brand-700 text-white rounded-xl shadow-lg shadow-brand-600/25 flex items-center justify-center transition-all duration-300 opacity-0 translate-y-4 pointer-events-none">
+        <i data-lucide="chevron-up" class="w-5 h-5"></i>
+    </button>
+
+    <script>
+        // ============================================
+        // PRODUCT DATA — 20 Website Templates
+        // ============================================
+        const products = [
+            { id:1, name:"Starter Portfolio", desc:"A clean, minimal portfolio for freelancers and creatives.", category:"portfolio", seed:"portfolio1" },
+            { id:2, name:"Business Pro", desc:"Professional corporate website with services and team sections.", category:"business", seed:"business2" },
+            { id:3, name:"ShopFront", desc:"Modern e-commerce template with product grid and cart.", category:"ecommerce", seed:"shop3" },
+            { id:4, name:"BlogMaster", desc:"Elegant blog template with categories and newsletter signup.", category:"blog", seed:"blog4" },
+            { id:5, name:"LaunchPad", desc:"High-converting landing page for startups and SaaS products.", category:"landing", seed:"launch5" },
+            { id:6, name:"Creative Studio", desc:"Bold, artistic portfolio for design agencies and studios.", category:"agency", seed:"studio6" },
+            { id:7, name:"Restaurant Elite", desc:"Beautiful restaurant site with menu, gallery, and reservations.", category:"business", seed:"restaurant7" },
+            { id:8, name:"Developer Hub", desc:"Tech-focused portfolio for software developers and engineers.", category:"portfolio", seed:"devhub8" },
+            { id:9, name:"Fashion Store", desc:"Stylish e-commerce template for clothing and fashion brands.", category:"ecommerce", seed:"fashion9" },
+            { id:10, name:"Agency Bold", desc:"Eye-catching agency website with case studies and testimonials.", category:"agency", seed:"agency10" },
+            { id:11, name:"Minimal Blog", desc:" distraction-free reading experience with clean typography.", category:"blog", seed:"minblog11" },
+            { id:12, name:"Gym & Fitness", desc:"Energetic fitness website with class schedules and trainers.", category:"business", seed:"gym12" },
+            { id:13, name:"Photography Pro", desc:"Stunning gallery-focused template for photographers.", category:"portfolio", seed:"photo13" },
+            { id:14, name:"SaaS Landing", desc:"Conversion-optimized page for software-as-a-service products.", category:"landing", seed:"saas14" },
+            { id:15, name:"Real Estate", desc:"Property listing template with search filters and map views.", category:"business", seed:"realestate15" },
+            { id:16, name:"Digital Agency", desc:"Sleek agency site with animations and project showcases.", category:"agency", seed:"digagency16" },
+            { id:17, name:"Online Courses", desc:"E-learning platform template with course cards and enrollment.", category:"ecommerce", seed:"courses17" },
+            { id:18, name:"Travel Blog", desc:"Adventure-themed blog with destination guides and photo journals.", category:"blog", seed:"travel18" },
+            { id:19, name:"Event Landing", desc:"Single-page event promotion with countdown and ticket section.", category:"landing", seed:"event19" },
+            { id:21, name:"media store", desc:"Trustworthy healthcare website with appointment booking.", category:"business", seed:"medical20" },
+            { id:22, name:"Medical Clinic", desc:"Trustworthy healthcare website with appointment booking.", category:"landing",  },
+            { id:23, name:"shoes store", desc:"Trustworthy healthcare website with appointment booking.", category:"blog", seed:"medical20" },
+            { id:24, name:"I STORE", desc:"Trustworthy healthcare website with appointment booking.", category:"portifolio", seed:"medical20" },
+            { id:25, name:"personal website", desc:"Trustworthy healthcare website with appointment booking.", category:"agency", seed:"medical20" },
+            { id:26, name:"Juice store", desc:"Trustworthy healthcare website with appointment booking.", category:"business", seed:"medical20" },
+
+        ];
+
+        const PRICE = "9,000 ETB";
+
+        // ============================================
+        // RENDER PRODUCTS
+        // ============================================
+        const grid = document.getElementById('productsGrid');
+        const noResults = document.getElementById('noResults');
+
+        function renderProducts(filteredList) {
+            grid.innerHTML = '';
+            if (filteredList.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+            filteredList.forEach((p, i) => {
+                const card = document.createElement('div');
+                card.className = 'card-hover fade-in bg-white dark:bg-[#171717] rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-xl hover:shadow-brand-600/10 hover:border-brand-300 dark:hover:border-brand-800 group';
+                card.style.animationDelay = `${i * 40}ms`;
+                card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[4/3]">
+                        <img src="https://picsum.photos/seed/${p.seed}/600/450.jpg" alt="${p.name}" class="card-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <span class="absolute top-3 left-3 px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-brand-600 text-white rounded-full">${p.category}</span>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-base mb-1.5 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${p.name}</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4 line-clamp-2">${p.desc}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-bold text-brand-600">${PRICE}</span>
+                            <button onclick="openBuyModal(${p.id})" class="inline-flex items-center gap-1.5 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-all duration-150 shadow-sm hover:shadow-md hover:shadow-brand-600/20 active:scale-95">
+                                Buy Now
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons({ attrs: { strokeWidth: 1.5 } });
+        }
+
+        renderProducts(products);
+
+        // ============================================
+        // SEARCH & FILTER
+        // ============================================
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+
+        function applyFilters() {
+            const query = searchInput.value.toLowerCase().trim();
+            const cat = categoryFilter.value;
+            const filtered = products.filter(p => {
+                const matchSearch = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
+                const matchCat = cat === 'all' || p.category === cat;
+                return matchSearch && matchCat;
+            });
+            renderProducts(filtered);
+        }
+
+        searchInput.addEventListener('input', applyFilters);
+        categoryFilter.addEventListener('change', applyFilters);
+
+        // ============================================
+        // BUY MODAL
+        // ============================================
+        const buyModal = document.getElementById('buyModal');
+
+        function openBuyModal(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('modalImg').src = `https://picsum.photos/seed/${p.seed}/200/150.jpg`;
+            document.getElementById('modalName').textContent = p.name;
+            document.getElementById('buyWebsite').value = p.name;
+            buyModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            // Re-init icons in modal
+            lucide.createIcons({ attrs: { strokeWidth: 1.5 } });
+        }
+
+        function closeBuyModal() {
+            buyModal.classList.add('hidden');
+            document.body.style.overflow = '';
+            document.getElementById('buyForm').reset();
+        }
+
+        // Close modal on Escape
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBuyModal(); });
+
+        // ============================================
+        // TOAST NOTIFICATIONS
+        // ============================================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const colors = type === 'success'
+                ? 'bg-green-600 text-white'
+                : type === 'error'
+                    ? 'bg-red-600 text-white'
+                    : 'bg-brand-600 text-white';
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info';
+            toast.className = `toast flex items-center gap-3 px-5 py-4 rounded-xl shadow-2xl ${colors} min-w-[300px]`;
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5 shrink-0"></i><span class="text-sm font-medium">${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons({ attrs: { strokeWidth: 1.5 } });
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        // ============================================
+        // EMAILJS SETUP
+        // ============================================
+        // ⚠️ REPLACE THESE THREE VALUES WITH YOUR OWN FROM EMAILJS
+        const EMAILJS_SERVICE_ID = 'service_x13cyt4';
+        const EMAILJS_TEMPLATE_ID = 'template_i9um0uo';
+        const EMAILJS_PUBLIC_KEY = 'TvWrop4IUNIu5rK9d';
+
+        // Initialize EmailJS (only if real keys are provided)
+        let emailjsReady = false;
+        if (EMAILJS_SERVICE_ID !== 'service_x13cyt4') {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+            emailjsReady = true;
+        }
+
+        // ============================================
+        // BUY FORM SUBMISSION
+        // ============================================
+        document.getElementById('buyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('buySubmitBtn');
+            const name = document.getElementById('buyName').value.trim();
+            const email = document.getElementById('buyEmail').value.trim();
+            const phone = document.getElementById('buyPhone').value.trim();
+            const website = document.getElementById('buyWebsite').value;
+
+            // Disable button
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25"></circle><path d="M4 12a8 8 0 018-8" stroke="currentColor" stroke-width="3" stroke-linecap="round" class="opacity-75"></path></svg> Processing...';
+
+            const templateParams = {
+                from_name: name,
+                from_email: email,
+                from_phone: phone,
+                website_name: website,
+                to_name: 'PK Website Store',
+                message: `New order from ${name}\nEmail: ${email}\nPhone: ${phone}\nWebsite: ${website}\nPrice: ${PRICE}`
+            };
+
+            if (emailjsReady) {
+                try {
+                    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+                    showToast('Order sent successfully! We\'ll contact you soon.', 'success');
+                    closeBuyModal();
+                } catch (err) {
+                    console.error('EmailJS Error:', err);
+                    showToast('Failed to send. Please try again or contact us directly.', 'error');
+                }
+            } else {
+                // Fallback: open mailto link
+                const subject = encodeURIComponent(`New Order: ${website}`);
+                const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nWebsite: ${website}\nPrice: ${PRICE}`);
+                window.open(`mailto:pedu0817@gmail.com?subject=${subject}&body=${body}`, '_blank');
+                showToast('Opening your email client...', 'info');
+                closeBuyModal();
+            }
+
+            // Re-enable button
+            btn.disabled = false;
+            btn.innerHTML = '<i data-lucide="credit-card" class="w-4 h-4"></i> Confirm Order — 9,000 ETB';
+            lucide.createIcons({ attrs: { strokeWidth: 1.5 } });
+        });
+
+        // ============================================
+        // CONTACT FORM (mailto fallback)
+        // ============================================
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputs = this.querySelectorAll('input, textarea');
+            const name = inputs[0].value.trim();
+            const email = inputs[1].value.trim();
+            const message = inputs[2].value.trim();
+
+            if (emailjsReady) {
+                // Use EmailJS for contact form too
+                const btn = this.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                btn.innerHTML = '<svg class="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25"></circle><path d="M4 12a8 8 0 018-8" stroke="currentColor" stroke-width="3" stroke-linecap="round" class="opacity-75"></path></svg> Sending...';
+
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    from_name: name,
+                    from_email: email,
+                    from_phone: 'N/A',
+                    website_name: 'Contact Form',
+                    to_name: 'PK Website Store',
+                    message: message
+                }).then(() => {
+                    showToast('Message sent successfully!', 'success');
+                    this.reset();
+                }).catch(() => {
+                    showToast('Failed to send. Try again.', 'error');
+                }).finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i> Send Message';
+                    lucide.createIcons({ attrs: { strokeWidth: 1.5 } });
+                });
+            } else {
+                const subject = encodeURIComponent(`Contact from ${name}`);
+                const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+                window.open(`mailto:pedu0817@gmail.com?subject=${subject}&body=${body}`, '_blank');
+                showToast('Opening your email client...', 'info');
+                this.reset();
+            }
+        });
+
+        // ============================================
+        // DARK MODE
+        // ============================================
+        const darkToggle = document.getElementById('darkToggle');
+        const html = document.documentElement;
+
+        // Check saved preference or system preference
+        if (localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+
+        darkToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('darkMode', html.classList.contains('dark'));
+        });
+
+        // ============================================
+        // MOBILE MENU
+        // ============================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // ============================================
+        // BACK TO TOP
+        // ============================================
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                backToTop.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                backToTop.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                backToTop.classList.remove('opacity-100', 'translate-y-0');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ============================================
+        // FAQ ACCORDION
+        // ============================================
+        const faqs = [
+            { q: "What do I get when I purchase a template?", a: "You receive the complete source code (HTML, CSS, JavaScript) for the template, along with all assets and a setup guide. You can customize it to fit your brand." },
+            { q: "Can I request custom modifications?", a: "Absolutely! After purchase, you can request custom changes. Some minor tweaks are free; larger modifications may have an additional cost." },
+            { q: "How is the template delivered?", a: "We deliver the template files via email within 24 hours of confirming your order. You'll receive a ZIP file with everything you need." },
+            { q: "Do you offer refunds?", a: "Since these are digital products, we generally don't offer refunds after delivery. However, if there's an issue with the template, we'll work with you to resolve it." },
+            { q: "Can I use the template for multiple projects?", a: "Each license is for a single website. If you need to use it for multiple projects, please contact us for a multi-site license at a discounted rate." },
+            { q: "What payment methods do you accept?", a: "We currently accept bank transfer, telebirr, and CBE Birr. Payment details will be sent after you submit your order." }
+        ];
+
+        const faqContainer = document.getElementById('faqContainer');
+        faqs.forEach((faq, i) => {
+            const item = document.createElement('div');
+            item.className = 'border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden';
+            item.innerHTML = `
+                <button onclick="toggleFaq(${i})" class="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    <span class="font-medium text-sm pr-4">${faq.q}</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 shrink-0 text-gray-400 transition-transform duration-300" id="faqIcon${i}"></i>
+                </button>
+                <div id="faqBody${i}" class="hidden px-5 pb-5">
+                    <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">${faq.a}</p>
+                </div>
+            `;
+            faqContainer.appendChild(item);
+        });
+
+        function toggleFaq(i) {
+            const body = document.getElementById(`faqBody${i}`);
+            const icon = document.getElementById(`faqIcon${i}`);
+            const isOpen = !body.classList.contains('hidden');
+            // Close all
+            faqs.forEach((_, j) => {
+                document.getElementById(`faqBody${j}`).classList.add('hidden');
+                document.getElementById(`faqIcon${j}`).style.transform = 'rotate(0deg)';
+            });
+            // Open clicked if it was closed
+            if (!isOpen) {
+                body.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // ============================================
+        // INIT LUCIDE ICONS
+        // ============================================
+        lucide.createIcons({ attrs: { strokeWidth: 1.5 } });
+    </script>
+</body>
+</html>
